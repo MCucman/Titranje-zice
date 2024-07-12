@@ -104,7 +104,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     const labels = Array.from({ length: 101 }, (_, i) => i * 0.1);
     const data = labels.map(x => Math.sin(x) * Math.cos(this.t));
-    console.log(data);
+
     this.myChart = new Chart(ctx, {
       type: 'line',
       data: {
