@@ -17,11 +17,13 @@ declare global {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent implements OnInit, OnDestroy {
   title = 'Titranje_zice';
   segments_u: Array<number> = [0];
   segments_v: Array<number> = [0];
   myChart!: Chart;
+  bool: boolean = false;
   t: number = 0;
   intervalId: any;
   pocetniPolozaj: string = '';
@@ -101,8 +103,8 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     const labels = Array.from({ length: 101 }, (_, i) => i * 0.1);
-    const data = labels.map(x => 10 * Math.sin(x) * Math.cos(this.t));
-
+    const data = labels.map(x => Math.sin(x) * Math.cos(this.t));
+    console.log(data);
     this.myChart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -127,8 +129,8 @@ export class AppComponent implements OnInit, OnDestroy {
             }
           },
           y: {
-            min: -10,
-            max: 10,
+            min: -1,
+            max: 1,
             title: {
               display: true,
               text: 'u(x, t)'
@@ -141,20 +143,24 @@ export class AppComponent implements OnInit, OnDestroy {
 
   updateChart() {
     const labels = Array.from({ length: 101 }, (_, i) => i * 0.1);
-    const data = labels.map(x => 10 * Math.sin(x) * Math.cos(this.t));
+    const data = labels.map(x => Math.sin(x) * Math.cos(this.t));
 
     this.myChart.data.datasets[0].data = data;
     this.myChart.update();
   }
 
   startAnimation() {
-    this.intervalId = setInterval(() => {
-      this.t += 0.1;
-      this.updateChart();
-    }, 100);
+    if(!this.bool){
+      this.bool = true;
+      this.intervalId = setInterval(() => {
+        this.t += 0.1;
+        this.updateChart();
+      }, 100);
+    }
   }
 
   stopAnimation() {
+    this.bool = false;
     if (this.intervalId) {
       clearInterval(this.intervalId);
       this.intervalId = null;
