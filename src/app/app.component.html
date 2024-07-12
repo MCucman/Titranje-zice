@@ -1,59 +1,97 @@
 <div class="upper ms-5 row">
   <div class="col mt-3">
     <p>Valna jednadžba:</p>
+    <div id="VJ" [innerHtml]="VJ"></div>
   </div>
   <div class="col mt-3">
     <p>Rubni uvjeti:</p>
+    <div id="RU" [innerHtml]="RU"></div>
   </div>
   <div class="col mt-3">
     <p>Početni uvjeti:</p>
+    <div id="PU" [innerHtml]="PU"></div>
   </div>
 </div>
 <div class="card row">
   <div class="col-md-5 ms-0">
-    <div class="row mt-4 g-3 align-items-center">
+    <div class="row mt-1 g-3 align-items-center">
       <div class="col-auto">
-        <label for="duljina-zice" class="col-form-label">Duljina žice: l =</label>
+        <label for="duljina-zice" class="col-form-label">
+          <div id="l" [innerHtml]="l"></div>
+        </label>
       </div>
       <div class="col-auto">
-        <input type="number" min="0" max="10" id="duljina-zice" class="form-control">
-      </div>
-    </div>
-    <div class="row mt-4 g-3 align-items-center">
-      <div class="col-auto">
-        <label for="brzina-sirenja-vala" class="col-form-label">Brzina širenja vala: c =</label>
-      </div>
-      <div class="col-auto">
-        <input type="number" min="0" max="10" step="0.1" id="brzina-sirenja-vala" class="form-control">
+        <input type="number" min="0" max="10" id="duljina-zice" class="form-control" [(ngModel)]="duljinaZice" (input)="dodajDuljinu()">
       </div>
     </div>
-    <div class="row mt-4 g-3 align-items-center">
+    <div class="row mt-1 g-3 align-items-center">
       <div class="col-auto">
-        <label for="pocetni-polozaj" class="col-form-label">Početni položaj: u_0 =</label>
+        <label for="brzina-sirenja-vala" class="col-form-label">
+          <div id="c" [innerHtml]="c"></div>
+        </label>
       </div>
       <div class="col-auto">
-        <input type="text" id="pocetni-polozaj" class="form-control">
+        <input type="number" min="0" max="10" step="0.1" id="brzina-sirenja-vala" class="form-control" [(ngModel)]="brzinaVala" (input)="dodajBrzinu()">
       </div>
-      <button class="btn">+</button>
     </div>
-    <div class="row mt-4 g-3 align-items-center">
-      <div class="col-auto">
-        <label  class="col-form-label">Početna brzina: v_0 =</label>
+    <div class="row mt-2 g-3 align-items-center">
+      <div class="about">?
+        <span class="about-text">Početni položaj</span>
       </div>
-      <div class="col-auto" >
-        <div *ngFor="let i of segments">
-          <input type="text" class="form-control" id="pocetna-brzina">
+      <div class="col-auto">
+        <label  class="col-form-label">
+          <div id="u0" [innerHtml]="u0"></div>
+        </label>
+      </div>
+      <div class="col-auto" *ngIf="segments_u.length == 1">
+        <input type="text" class="form-control" id="pocetni-polozaj" [(ngModel)]="pocetniPolozaj" (input)="dodajUvjet()">
+      </div>
+      <div class="col-auto" *ngIf="segments_u.length > 1">
+        <div *ngFor="let i of segments_u">
+          <div class="row">
+            <input style="width: 120px;" type="text" class="form-control" [id]="'pocetni-polozaj-'+i">
+            <input style="width: 120px;" type="text" class="form-control" [id]="'segment_u-'+i" placeholder="[a, b]">
+          </div>
         </div>
       </div>
       <div class="col-auto d-flex">
-        <button class="btn" (click)="addSegment()">+</button>
-      <div *ngIf="segments.length > 1">
-        <button class="btn" (click)="removeSegment()">--</button>
+        <div *ngIf="segments_u.length < 4">
+          <button class="btn" (click)="addSegment_u()">+</button>
+        </div>
+        <div *ngIf="segments_u.length > 1">
+          <button class="btn" (click)="removeSegment_u()">--</button>
+        </div>
       </div>
-      </div>
-
     </div>
-
+    <div class="row mt-2 g-3 align-items-center">
+      <div class="about">?
+        <span class="about-text">Početna brzina</span>
+      </div>
+      <div class="col-auto">
+        <label  class="col-form-label">
+          <div id="v0" [innerHtml]="v0"></div>
+        </label>
+      </div>
+      <div class="col-auto" *ngIf="segments_v.length == 1">
+        <input type="text" class="form-control" id="pocetna-brzina" [(ngModel)]="pocetnaBrzina" (input)="dodajUvjet()">
+      </div>
+      <div class="col-auto" *ngIf="segments_v.length > 1">
+        <div *ngFor="let i of segments_v">
+          <div class="row">
+            <input style="width: 120px;" type="text" class="form-control" [id]="'pocetna-brzina-'+i">
+            <input style="width: 120px;" type="text" class="form-control" [id]="'segment_v-'+i" placeholder="[a, b]">
+          </div>
+        </div>
+      </div>
+      <div class="col-auto d-flex">
+        <div *ngIf="segments_v.length < 4">
+          <button class="btn" (click)="addSegment_v()">+</button>
+        </div>
+        <div *ngIf="segments_v.length > 1">
+          <button class="btn" (click)="removeSegment_v()">--</button>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="graf ">
     <canvas id="myChart" width="400" height="200"></canvas>
@@ -62,5 +100,4 @@
       <button class="btn btn-zaustavi-animaciju">Zaustavi animaciju</button>
     </div>
   </div>
-
 </div>

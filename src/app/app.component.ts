@@ -2,34 +2,90 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Chart } from 'chart.js/auto';
+import { FormsModule } from '@angular/forms';
+
+declare global {
+  interface Window {
+    MathJax: any;
+  }
+}
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule],
+  imports: [RouterOutlet, CommonModule, FormsModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'Titranje_zice';
-  segments: Array<number> = [0];
+  segments_u: Array<number> = [0];
+  segments_v: Array<number> = [0];
   myChart!: Chart;
   t: number = 0;
   intervalId: any;
+  pocetniPolozaj: string = '';
+  pocetnaBrzina: string = '';
+  duljinaZice: number = 0;
+  brzinaVala: number = 0;
+  VJ!: string;
+  RU!: string;
+  PU!: string;
+  l!: string;
+  c!: string;
+  u0!: string;
+  v0!: string;
 
   constructor() { }
 
-  addSegment(): void{
-    this.segments.push(this.segments.length);
-  }
-
-  removeSegment(){
-    this.segments.pop();
-  }
-
-  ngOnInit(): void {
+  ngOnInit() {
+    this.VJ = '$$\\frac{\\partial^2u}{\\partial t^2}(x,t) - c^2 \\frac{\\partial^2u}{\\partial x^2}(x,t) = 0$$';
+    this.RU = '$$u(0,t) = 0\\\\ u(l,t) = 0$$'
+    this.PU = '$$u_0(x) =  \\\\ v_0(x) =  $$';
+    this.l = '$$Duljina\\\: žice:\\\: l =$$'
+    this.c = '$$Brzina\\\: širenja\\\: vala:\\\: c =$$'
+    this.u0 = '$$Početni\\\: položaj:\\\: u_0(x) =$$'
+    this.v0 = '$$Početna\\\: brzina:\\\: v_0(x) =$$'
+    this.renderMathJax();
     this.setupChart();
     this.addEventListeners();
+  }
+
+  dodajUvjet() {
+    this.PU = `$$u_0(x) = ${this.pocetniPolozaj} \\\\ v_0(x) = ${this.pocetnaBrzina}$$`;
+    this.renderMathJax();
+  }
+
+  dodajDuljinu() {
+    this.RU = `$$ u(0,t) = 0\\\\ u(${this.duljinaZice},t) = 0 $$`
+    this.renderMathJax();
+  }
+
+  dodajBrzinu() {
+    this.VJ = `$$\\frac{\\partial^2u}{\\partial t^2}(x,t) - ${this.brzinaVala}^2 \\frac{\\partial^2u}{\\partial x^2}(x,t) = 0$$`;
+    this.renderMathJax();
+  }
+
+  renderMathJax() {
+    if (window['MathJax']) {
+      window['MathJax'].Hub.Queue(['Typeset', window['MathJax'].Hub]);
+    }
+  }
+
+  addSegment_u(): void{
+    this.segments_u.push(this.segments_u.length);
+  }
+
+  removeSegment_u(){
+    this.segments_u.pop();
+  }
+
+  addSegment_v(): void{
+    this.segments_v.push(this.segments_v.length);
+  }
+
+  removeSegment_v(){
+    this.segments_v.pop();
   }
 
   ngOnDestroy(): void {
@@ -52,7 +108,7 @@ export class AppComponent implements OnInit, OnDestroy {
       data: {
         labels: labels,
         datasets: [{
-          label: 'Funkcija zavisna o vremenu i prostoru',
+          label: 'Gibanje žice kroz vrijeme',
           data: data,
           borderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 1,

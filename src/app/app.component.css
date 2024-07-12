@@ -56,3 +56,50 @@
   height: 90%;
   background-color: #e4e3e3;
 }
+
+.about {
+  position: relative;
+  display: inline-block;
+  width: min-content;
+  height: min-content;
+  font-size:smaller;
+  margin-bottom: 15px;
+  margin-left: -20px;
+  background-color: #ababab;
+  border-radius: 20%;
+  text-align: center;
+  font-weight: bold;
+}
+
+.about-text {
+  display: none;
+  position: absolute;
+  bottom: 100%; /* Pomera oblačić iznad roditeljskog diva */
+  left: 100%;
+  transform: translateX(-15%);
+  background-color: #ababab;
+  color: #303030;
+  padding: 5px 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  white-space: nowrap;
+  z-index: 1;
+  width: 300px;
+  text-wrap: balance;
+  font-weight: normal;
+}
+
+.about:hover .about-text {
+  display: block;
+}
+
+.about-text::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 12%;
+  transform: translateX(-100%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #ababab transparent transparent;
+}
