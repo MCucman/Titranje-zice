@@ -38,33 +38,21 @@ export class AppComponent implements OnInit, OnDestroy {
   u0!: string;
   v0!: string;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     this.VJ = '$$\\frac{\\partial^2u}{\\partial t^2}(x,t) - c^2 \\frac{\\partial^2u}{\\partial x^2}(x,t) = 0$$';
-    this.RU = '$$u(0,t) = 0\\\\ u(l,t) = 0$$'
+    this.RU = '$$u(0,t) = 0\\\\ u(l,t) = 0$$';
     this.PU = '$$u_0(x) =  \\\\ v_0(x) =  $$';
-    this.l = '$$Duljina\\\: žice:\\\: l =$$'
-    this.c = '$$Brzina\\\: širenja\\\: vala:\\\: c =$$'
-    this.u0 = '$$Početni\\\: položaj:\\\: u_0(x) =$$'
-    this.v0 = '$$Početna\\\: brzina:\\\: v_0(x) =$$'
-    this.renderMathJax();
+    this.l = '$$Duljina\\\: žice:\\\: l =$$';
+    this.c = '$$Brzina\\\: širenja\\\: vala:\\\: c =$$';
+    this.u0 = '$$Početni\\\: položaj:\\\: u_0(x) =$$';
+    this.v0 = '$$Početna\\\: brzina:\\\: v_0(x) =$$';
     this.setupChart();
     this.addEventListeners();
   }
 
-  dodajUvjet() {
-    this.PU = `$$u_0(x) = ${this.pocetniPolozaj} \\\\ v_0(x) = ${this.pocetnaBrzina}$$`;
-    this.renderMathJax();
-  }
-
-  dodajDuljinu() {
-    this.RU = `$$ u(0,t) = 0\\\\ u(${this.duljinaZice},t) = 0 $$`
-    this.renderMathJax();
-  }
-
-  dodajBrzinu() {
-    this.VJ = `$$\\frac{\\partial^2u}{\\partial t^2}(x,t) - ${this.brzinaVala}^2 \\frac{\\partial^2u}{\\partial x^2}(x,t) = 0$$`;
+  ngAfterViewChecked() {
     this.renderMathJax();
   }
 
@@ -74,19 +62,29 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  addSegment_u(): void{
+  azuriraj() {
+    this.VJ = `$$\\frac{\\partial^2u}{\\partial t^2}(x,t) - ${this.brzinaVala}^2 \\frac{\\partial^2u}{\\partial x^2}(x,t) = 0$$`;
+    this.RU = `$$ u(0,t) = 0\\\\ u(${this.duljinaZice},t) = 0 $$`;
+    this.PU = `$$u_0(x) = ${this.pocetniPolozaj} \\\\ v_0(x) = ${this.pocetnaBrzina}$$`;
+  }
+
+  integrate(){
+
+  }
+
+  addSegment_u(): void {
     this.segments_u.push(this.segments_u.length);
   }
 
-  removeSegment_u(){
+  removeSegment_u() {
     this.segments_u.pop();
   }
 
-  addSegment_v(): void{
+  addSegment_v(): void {
     this.segments_v.push(this.segments_v.length);
   }
 
-  removeSegment_v(){
+  removeSegment_v() {
     this.segments_v.pop();
   }
 
@@ -113,7 +111,7 @@ export class AppComponent implements OnInit, OnDestroy {
           label: 'Gibanje žice kroz vrijeme',
           data: data,
           borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1,
+          borderWidth: 2,
           fill: false,
           pointRadius: 0
         }]
@@ -150,7 +148,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   startAnimation() {
-    if(!this.bool){
+    if (!this.bool) {
       this.bool = true;
       this.intervalId = setInterval(() => {
         this.t += 0.1;
