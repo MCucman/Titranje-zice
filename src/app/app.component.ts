@@ -108,24 +108,36 @@ export class AppComponent implements OnInit, OnDestroy {
 
   addSegment_u(): void {
     this.segments_u.push(this.segments_u.length);
-    this.segment_u.push('');
-    this.pocetniPolozaji.push('');
+    this.tempsegment_u.push('');
+    this.temppocetniPolozaji.push('');
+    if(this.segments_u.length == 2) this.temppocetniPolozaj = '';
   }
 
   removeSegment_u() {
     this.segments_u.pop();
-    this.segment_u.pop();
-    this.pocetniPolozaji.pop();
+    this.tempsegment_u.pop();
+    this.temppocetniPolozaji.pop();
+    if(this.segments_u.length == 1){
+      this.tempsegment_u.pop();
+      this.temppocetniPolozaji.pop();
+    }
   }
 
   addSegment_v(): void {
     this.segments_v.push(this.segments_v.length);
+    this.tempsegment_v.push('');
+    this.temppocetneBrzine.push('');
+    if(this.segments_v.length == 2) this.temppocetnaBrzina = '';
   }
 
   removeSegment_v() {
     this.segments_v.pop();
-    this.segment_v.pop();
-    this.pocetneBrzine.pop();
+    this.tempsegment_v.pop();
+    this.temppocetneBrzine.pop();
+    if(this.segments_v.length == 1){
+      this.tempsegment_v.pop();
+      this.temppocetneBrzine.pop();
+    }
   }
 
   startAnimation() {
