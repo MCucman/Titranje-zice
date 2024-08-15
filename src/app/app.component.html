@@ -12,109 +12,113 @@
     <div id="PU" [innerHtml]="PU"></div>
   </div>
 </div>
+<div class="ws">
+  <div class="card row">
+    <div class="col-md-5 ms-0">
+      <!-- Duljina žice -->
+      <div class="row mt-1 g-3 align-items-center">
+        <div class="col-auto">
+          <label for="duljina-zice" class="col-form-label">
+            <div id="l" [innerHtml]="l"></div>
+          </label>
+        </div>
+        <div class="col-auto">
+          <input type="number" min="0" max="10" id="duljina-zice" class="form-control" [(ngModel)]="tempduljinaZice">
+        </div>
+      </div>
 
-<div class="card row">
-  <div class="col-md-5 ms-0">
-    <!-- Duljina žice -->
-    <div class="row mt-1 g-3 align-items-center">
-      <div class="col-auto">
-        <label for="duljina-zice" class="col-form-label">
-          <div id="l" [innerHtml]="l"></div>
-        </label>
+      <!-- Brzina širenja vala -->
+      <div class="row mt-1 g-3 align-items-center">
+        <div class="col-auto">
+          <label for="brzina-sirenja-vala" class="col-form-label">
+            <div id="c" [innerHtml]="c"></div>
+          </label>
+        </div>
+        <div class="col-auto">
+          <input type="number" min="0" max="100" step="1" id="brzina-sirenja-vala" class="form-control" [(ngModel)]="tempbrzinaVala">
+        </div>
       </div>
-      <div class="col-auto">
-        <input type="number" min="0" max="10" id="duljina-zice" class="form-control" [(ngModel)]="duljinaZice">
-      </div>
-    </div>
 
-    <!-- Brzina širenja vala -->
-    <div class="row mt-1 g-3 align-items-center">
-      <div class="col-auto">
-        <label for="brzina-sirenja-vala" class="col-form-label">
-          <div id="c" [innerHtml]="c"></div>
-        </label>
-      </div>
-      <div class="col-auto">
-        <input type="number" min="0" max="10" step="0.1" id="brzina-sirenja-vala" class="form-control" [(ngModel)]="brzinaVala">
-      </div>
-    </div>
-
-    <!-- Početni položaj -->
-    <div class="row mt-2 g-3 align-items-center">
-      <div class="about">?
-        <span class="about-text">Početni položaj</span>
-      </div>
-      <div class="col-auto">
-        <label class="col-form-label">
-          <div id="u0" [innerHtml]="u0"></div>
-        </label>
-      </div>
-      <div class="col-auto" *ngIf="segments_u.length == 1">
-        <input type="text" class="form-control" id="pocetni-polozaj" [(ngModel)]="pocetniPolozaj">
-      </div>
-      <div class="col-auto" *ngIf="segments_u.length > 1">
-        <div *ngFor="let i of segments_u">
-          <div class="row">
-            <input style="width: 120px;" type="text" class="form-control" [id]="'pocetni-polozaj-'+i">
-            <input style="width: 120px;" type="text" class="form-control" [id]="'segment_u-'+i" placeholder="[a, b]">
+      <!-- Početni položaj -->
+      <div class="row mt-2 g-3 align-items-center">
+        <div class="about">?
+          <span class="about-text">Upišite funkciju koja opisuje položaj žice u početnom trenutku.
+            Pomoću gumba "+" možete dodati nove segmente i time definirati funkciju po različitim intervalima.</span>
+        </div>
+        <div class="col-auto">
+          <label class="col-form-label">
+            <div id="u0" [innerHtml]="u0"></div>
+          </label>
+        </div>
+        <div class="col-auto" *ngIf="segments_u.length == 1">
+          <input type="text" class="form-control" id="pocetni-polozaj" [(ngModel)]="temppocetniPolozaj">
+        </div>
+        <div class="col-auto" *ngIf="segments_u.length > 1">
+          <div *ngFor="let i of segments_u">
+            <div class="row">
+              <input style="width: 118px;" type="text" class="form-control" [id]="'pocetni-polozaj-'+i" [(ngModel)]="temppocetniPolozaji[i]">
+              <input style="width: 118px;" type="text" class="form-control" [id]="'segment_u-'+i" placeholder="[a, b]" [(ngModel)]="tempsegment_u[i]">
+            </div>
+          </div>
+        </div>
+        <div class="col-auto d-flex">
+          <div *ngIf="segments_u.length < 4">
+            <button class="btn" (click)="addSegment_u()">+</button>
+          </div>
+          <div *ngIf="segments_u.length > 1">
+            <button class="btn" (click)="removeSegment_u()">--</button>
           </div>
         </div>
       </div>
-      <div class="col-auto d-flex">
-        <div *ngIf="segments_u.length < 4">
-          <button class="btn" (click)="addSegment_u()">+</button>
-        </div>
-        <div *ngIf="segments_u.length > 1">
-          <button class="btn" (click)="removeSegment_u()">--</button>
-        </div>
-      </div>
-    </div>
 
-    <!-- Početna brzina -->
-    <div class="row mt-2 g-3 align-items-center">
-      <div class="about">?
-        <span class="about-text">Početna brzina</span>
-      </div>
-      <div class="col-auto">
-        <label class="col-form-label">
-          <div id="v0" [innerHtml]="v0"></div>
-        </label>
-      </div>
-      <div class="col-auto" *ngIf="segments_v.length == 1">
-        <input type="text" class="form-control" id="pocetna-brzina" [(ngModel)]="pocetnaBrzina">
-      </div>
-      <div class="col-auto" *ngIf="segments_v.length > 1">
-        <div *ngFor="let i of segments_v">
-          <div class="row">
-            <input style="width: 120px;" type="text" class="form-control" [id]="'pocetna-brzina-'+i">
-            <input style="width: 120px;" type="text" class="form-control" [id]="'segment_v-'+i" placeholder="[a, b]">
+      <!-- Početna brzina -->
+      <div class="row mt-2 g-3 align-items-center">
+        <div class="about">?
+          <span class="about-text">Upišite funkciju koja opisuje brzinu žice u početnom trenutku.
+            Pomoću gumba "+" možete dodati nove segmente i time definirati funkciju po različitim intervalima.</span>
+        </div>
+        <div class="col-auto">
+          <label class="col-form-label">
+            <div id="v0" [innerHtml]="v0"></div>
+          </label>
+        </div>
+        <div class="col-auto" *ngIf="segments_v.length == 1">
+          <input type="text" class="form-control" id="pocetna-brzina" [(ngModel)]="temppocetnaBrzina">
+        </div>
+        <div class="col-auto" *ngIf="segments_v.length > 1">
+          <div *ngFor="let i of segments_v">
+            <div class="row">
+              <input style="width: 120px;" type="text" class="form-control" [id]="'pocetna-brzina-'+i" [(ngModel)]="temppocetneBrzine[i]">
+              <input style="width: 120px;" type="text" class="form-control" [id]="'segment_v-'+i" placeholder="[a, b]" [(ngModel)]="tempsegment_v[i]">
+            </div>
+          </div>
+        </div>
+        <div class="col-auto d-flex">
+          <div *ngIf="segments_v.length < 4">
+            <button class="btn" (click)="addSegment_v()">+</button>
+          </div>
+          <div *ngIf="segments_v.length > 1">
+            <button class="btn" (click)="removeSegment_v()">--</button>
           </div>
         </div>
       </div>
-      <div class="col-auto d-flex">
-        <div *ngIf="segments_v.length < 4">
-          <button class="btn" (click)="addSegment_v()">+</button>
-        </div>
-        <div *ngIf="segments_v.length > 1">
-          <button class="btn" (click)="removeSegment_v()">--</button>
+
+      <!-- Gumb za ažuriranje -->
+      <div class="row mt-3">
+        <div class="col-auto">
+          <button class="btn btn-primary" (click)="azuriraj()">Ažuriraj</button>
         </div>
       </div>
     </div>
 
-    <!-- Gumb za ažuriranje -->
-    <div class="row mt-3">
-      <div class="col-auto">
-        <button class="btn btn-primary" (click)="azuriraj()">Ažuriraj</button>
+    <!-- Graf -->
+    <div class="graf">
+      <canvas id="myChart" width="400" height="200"></canvas>
+      <div class="mt-2 d-flex justify-content-between">
+        <button class="btn btn-pokreni-animaciju">Pokreni animaciju</button>
+        <button class="btn btn-zaustavi-animaciju">Zaustavi animaciju</button>
       </div>
     </div>
   </div>
 
-  <!-- Graf -->
-  <div class="graf">
-    <canvas id="myChart" width="400" height="200"></canvas>
-    <div class="mt-2 d-flex justify-content-between">
-      <button class="btn btn-pokreni-animaciju">Pokreni animaciju</button>
-      <button class="btn btn-zaustavi-animaciju">Zaustavi animaciju</button>
-    </div>
-  </div>
 </div>
