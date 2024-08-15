@@ -46,7 +46,7 @@ export class ChartService {
             type: 'linear',
             position: 'bottom',
             min: 0,
-            max: 7,
+            max: 10,
             title: {
               display: true,
               text: 'x'

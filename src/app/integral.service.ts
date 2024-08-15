@@ -11,7 +11,7 @@ export class IntegralService {
   integrate(f:string, l: number, a: number, b: number, n: number): number{
     let g = mathjs.parse(f).compile();
     const h = (b - a) / 20;
-    let sum = 0.5 * (g.evaluate({x: a}) + g.evaluate({x: b})) * Math.sin(n*Math.PI*b/l);
+    let sum = 0.5 * (g.evaluate({x: a})* Math.sin(n*Math.PI*a/l) + g.evaluate({x: b})* Math.sin(n*Math.PI*b/l));
     for (let i = 1; i < 20; i++) {
       sum += g.evaluate({x: a+i*h}) * Math.sin(n*Math.PI*(a+i*h)/l);
     }
