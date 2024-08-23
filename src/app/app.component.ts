@@ -24,14 +24,16 @@ export class AppComponent implements OnInit, OnDestroy {
   segments_u: Array<number> = [0];
   segments_v: Array<number> = [0];
   bool: boolean = false;
+  popup: boolean = false;
   intervalId: any;
-  VJ!: string;
-  RU!: string;
-  PU!: string;
-  l!: string;
-  c!: string;
-  u0!: string;
-  v0!: string;
+  VJ: string = '$$\\frac{\\partial^2u}{\\partial t^2}(x,t) - c^2 \\frac{\\partial^2u}{\\partial x^2}(x,t) = 0$$';
+  RU: string = '$$u(0,t) = 0\\\\ u(l,t) = 0$$';
+  PU: string = '$$u_0(x) =  \\\\ v_0(x) =  $$';
+  l: string = '$$Duljina\\\: žice:\\\: l =$$';
+  c: string = '$$Brzina\\\: širenja\\\: vala:\\\: c =$$';
+  ru: string = '$$Konstante\\\: rubnih\\\: uvjeta: \\\: $$';
+  u0: string = '$$Početni\\\: položaj:\\\: u_0(x) =$$';
+  v0: string = '$$Početna\\\: brzina:\\\: v_0(x) =$$';
 
   tempsegment_u: Array<string> = [];
   tempsegment_v: Array<string> = [];
@@ -51,17 +53,9 @@ export class AppComponent implements OnInit, OnDestroy {
   duljinaZice: number = 0;
   brzinaVala: number = 0;
 
-
   constructor(private chartService: ChartService, private integralService: IntegralService) {}
 
   ngOnInit() {
-    this.VJ = '$$\\frac{\\partial^2u}{\\partial t^2}(x,t) - c^2 \\frac{\\partial^2u}{\\partial x^2}(x,t) = 0$$';
-    this.RU = '$$u(0,t) = 0\\\\ u(l,t) = 0$$';
-    this.PU = '$$u_0(x) =  \\\\ v_0(x) =  $$';
-    this.l = '$$Duljina\\\: žice:\\\: l =$$';
-    this.c = '$$Brzina\\\: širenja\\\: vala:\\\: c =$$';
-    this.u0 = '$$Početni\\\: položaj:\\\: u_0(x) =$$';
-    this.v0 = '$$Početna\\\: brzina:\\\: v_0(x) =$$';
     this.chartService.setupChart();
     this.addEventListeners();
   }
@@ -103,10 +97,16 @@ export class AppComponent implements OnInit, OnDestroy {
     this.RU = `$$ u(0,t) = 0\\\\ u(${this.duljinaZice},t) = 0 $$`;
     this.chartService.t = 0;
     this.chartService.myChart.options.scales!['x']!.max = this.duljinaZice;
+    this.chartService.myChart.options.scales!['y']!.min = -this.amplitude();
+    this.chartService.myChart.options.scales!['y']!.max = this.amplitude();
     this.updateChart();
   }
 
   addSegment_u(): void {
+    if(this.segments_u.length == 1){
+      this.tempsegment_u.push('');
+      this.temppocetniPolozaji.push('');
+    }
     this.segments_u.push(this.segments_u.length);
     this.tempsegment_u.push('');
     this.temppocetniPolozaji.push('');
@@ -138,6 +138,10 @@ export class AppComponent implements OnInit, OnDestroy {
       this.tempsegment_v.pop();
       this.temppocetneBrzine.pop();
     }
+  }
+
+  triggerPopup(){
+    this.popup = !this.popup;
   }
 
   startAnimation() {
@@ -225,5 +229,23 @@ export class AppComponent implements OnInit, OnDestroy {
         f = this.integralService.integrate_n(this.pocetneBrzine, this.duljinaZice, arr, n);
     }
     return 2/n/Math.PI/this.brzinaVala*f;
+  }
+
+  amplitude(){
+    let data = []
+    let labels = Array.from({ length: this.duljinaZice*10+1 }, (_, i) => i * 0.1);
+    for(let i = 0; i < labels.length; i++){
+      data[i] = this.s(labels[i]);
+    }
+    const max = Math.max(...data);
+    return max + 0.3 * max;
+  }
+
+  s(x:number){
+    let sum = 0;
+    for(let n = 1; n < 10; n++){
+      sum += Math.sqrt(this.A_n(n)**2 + this.B_n(n)**2)*Math.sin(n*Math.PI*x/this.duljinaZice);
+    }
+    return sum;
   }
 }

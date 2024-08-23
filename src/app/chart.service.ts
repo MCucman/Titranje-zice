@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Chart } from 'chart.js/auto';
-import { chain } from 'mathjs';
 
 @Injectable({
   providedIn: 'root'

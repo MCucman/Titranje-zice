@@ -1,22 +1,23 @@
-<div class="upper ms-5 row">
-  <div class="col mt-3">
+<div class="upper ms-5 row h">
+  <div class="col mt-3 h">
     <p>Valna jednadžba:</p>
     <div id="VJ" [innerHtml]="VJ"></div>
   </div>
-  <div class="col mt-3">
+  <div class="col mt-3 h">
     <p>Rubni uvjeti:</p>
     <div id="RU" [innerHtml]="RU"></div>
   </div>
-  <div class="col mt-3">
+  <div class="col mt-3 h">
     <p>Početni uvjeti:</p>
-    <div id="PU" [innerHtml]="PU"></div>
+    <div [ngClass]="{'scrollable1': segment_v.length > 5 || segment_u.length > 5}" id="PU" [innerHtml]="PU"></div>
   </div>
 </div>
-<div class="ws">
+<div class="ws" [ngClass]="{'mb': (segments_u.length > 1 && segments_v.length > 1) || segments_u.length > 2 || segments_v.length > 2}">
   <div class="card row">
     <div class="col-md-5 ms-0">
+
       <!-- Duljina žice -->
-      <div class="row mt-1 g-3 align-items-center">
+      <div class="row align-items-center">
         <div class="col-auto">
           <label for="duljina-zice" class="col-form-label">
             <div id="l" [innerHtml]="l"></div>
@@ -28,7 +29,7 @@
       </div>
 
       <!-- Brzina širenja vala -->
-      <div class="row mt-1 g-3 align-items-center">
+      <div class="row align-items-center">
         <div class="col-auto">
           <label for="brzina-sirenja-vala" class="col-form-label">
             <div id="c" [innerHtml]="c"></div>
@@ -40,7 +41,7 @@
       </div>
 
       <!-- Početni položaj -->
-      <div class="row mt-2 g-3 align-items-center">
+      <div class="row mt-2 align-items-center">
         <div class="about">?
           <span class="about-text">Opisuje položaj žice u početnom trenutku. Pritiskom na gumb '+' funkcija se može definirati po segmentima.</span>
         </div>
@@ -52,18 +53,16 @@
         <div class="col-auto" *ngIf="segments_u.length == 1">
           <input type="text" class="form-control" id="pocetni-polozaj" [(ngModel)]="temppocetniPolozaj">
         </div>
-        <div class="col-auto" *ngIf="segments_u.length > 1">
+        <div class="col-auto" [ngClass]="{'scrollable2': segments_u.length > 3}" *ngIf="segments_u.length > 1">
           <div *ngFor="let i of segments_u">
             <div class="row">
-              <input style="width: 118px;" type="text" class="form-control" [id]="'pocetni-polozaj-'+i" [(ngModel)]="temppocetniPolozaji[i]">
-              <input style="width: 118px;" type="text" class="form-control" [id]="'segment_u-'+i" placeholder="[a, b]" [(ngModel)]="tempsegment_u[i]">
+              <input style="width: 115px;" type="text" class="form-control" [id]="'pocetni-polozaj-'+i" [(ngModel)]="temppocetniPolozaji[i]">
+              <input style="width: 115px;" type="text" class="form-control" [id]="'segment_u-'+i" placeholder="[a, b]" [(ngModel)]="tempsegment_u[i]">
             </div>
           </div>
         </div>
-        <div class="col-auto d-flex">
-          <div *ngIf="segments_u.length < 4">
-            <button class="btn" (click)="addSegment_u()">+</button>
-          </div>
+        <div class="col-auto d-flex bs">
+          <button class="btn" (click)="addSegment_u()">+</button>
           <div *ngIf="segments_u.length > 1">
             <button class="btn" (click)="removeSegment_u()">--</button>
           </div>
@@ -71,7 +70,7 @@
       </div>
 
       <!-- Početna brzina -->
-      <div class="row mt-2 g-3 align-items-center">
+      <div class="row mt-2 align-items-center">
         <div class="about">?
           <span class="about-text">Opisuje početnu brzinu žice. Pritiskom na gumb '+' funkcija se može definirati po segmentima.</span>
         </div>
@@ -83,18 +82,16 @@
         <div class="col-auto" *ngIf="segments_v.length == 1">
           <input type="text" class="form-control" id="pocetna-brzina" [(ngModel)]="temppocetnaBrzina">
         </div>
-        <div class="col-auto" *ngIf="segments_v.length > 1">
+        <div class="col-auto" [ngClass]="{'scrollable2': segments_v.length > 3}" *ngIf="segments_v.length > 1">
           <div *ngFor="let i of segments_v">
             <div class="row">
-              <input style="width: 120px;" type="text" class="form-control" [id]="'pocetna-brzina-'+i" [(ngModel)]="temppocetneBrzine[i]">
-              <input style="width: 120px;" type="text" class="form-control" [id]="'segment_v-'+i" placeholder="[a, b]" [(ngModel)]="tempsegment_v[i]">
+              <input style="width: 115px;" type="text" class="form-control" [id]="'pocetna-brzina-'+i" [(ngModel)]="temppocetneBrzine[i]">
+              <input style="width: 115px;" type="text" class="form-control" [id]="'segment_v-'+i" placeholder="[a, b]" [(ngModel)]="tempsegment_v[i]">
             </div>
           </div>
         </div>
-        <div class="col-auto d-flex">
-          <div *ngIf="segments_v.length < 4">
-            <button class="btn" (click)="addSegment_v()">+</button>
-          </div>
+        <div class="col-auto d-flex bs">
+          <button class="btn" (click)="addSegment_v()">+</button>
           <div *ngIf="segments_v.length > 1">
             <button class="btn" (click)="removeSegment_v()">--</button>
           </div>
@@ -104,7 +101,7 @@
       <!-- Gumb za ažuriranje -->
       <div class="row mt-3">
         <div class="col-auto">
-          <button class="btn btn-primary" (click)="azuriraj()">Ažuriraj</button>
+          <button class="btn" (click)="azuriraj()">Ažuriraj</button>
         </div>
       </div>
     </div>
@@ -118,5 +115,15 @@
       </div>
     </div>
   </div>
+</div>
 
+<div class="btn2">
+  <button class="btn" (click)="triggerPopup()">info</button>
+</div>
+<div class="info-popup" *ngIf="popup">
+  <div class="popup-content">
+    <h2>Informacije</h2>
+    <p>Ovdje ide tekst s informacijama o titranju napete žice.</p>
+    <button class="btn" (click)="triggerPopup()">Zatvori</button>
+  </div>
 </div>
