@@ -122,8 +122,21 @@
 </div>
 <div class="info-popup" *ngIf="popup">
   <div class="popup-content">
-    <h2>Informacije</h2>
-    <p>Ovdje ide tekst s informacijama o titranju napete žice.</p>
+    <h2>Tiranje napete žice </h2>
+    <p>Titranje napete žice opisuje oscilacije žice koja je napeta silom duž svoje duljine. Te oscilacije su opisane valnom jednadžbom
+       koja zajedno sa početnim i rubnim uvjetim čini <i>početno-rubnu zadaću za valnu jednadžbu</i>. Rješava se Fourierovom metodom koja tvrdi
+       da se <i>svaku (periodičnu) funkciju može zapisati kao beskonačnu sumu sinus i kosinus funkcija</i>. Rješenje valne jednadžbe, ako
+       postoji, nije jedinstveno. Za određivanje jedinstvenog rješenja potrebno je specificirati uvjete na rubovima žice i početku 
+       vremenskog intervala. Postoji nekoliko vrsta rubnih uvjeta, među kojima su najvažniji Dirichletovi, Neumannovi i Robinovi uvjeti.<br>
+       
+       Detaljnije o njima, te samom titranju žice možete pronaći u radu: ...<br>
+       Ako žica ne mijenja stanje, tj. nije u pokretu, ona je u ravnoteži te više o toj temi možete pronaći u radu: ...
+    </p>
+       <h2>O aplikaciji</h2>
+    <p>Omogućava vizualizaciju i simulaciju korisnicima kako različiti parametri, poput duljine žice, brzine širenja vala,
+       početnog položaja i početne brzine, utječu na ponašanje žice. Kroz grafičko sučelje, korisnici mogu mijenjati ove parametre u realnom 
+       vremenu i odmah vidjeti rezultate, što olakšava razumijevanje matematičkog modela koji stoji iza ove pojave.
+    </p>
     <button class="btn" (click)="triggerPopup()">Zatvori</button>
   </div>
 </div>
