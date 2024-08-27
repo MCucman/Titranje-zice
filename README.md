@@ -102,7 +102,7 @@ A_n(n: number){
 ```
 
 U sijedećim metodama, `sum` računa gibanje žice kroz vrijeme, odnosno njezin progib iz ravnotežnog položaja u točki 'x'.
-Zajedno s metodom `f` one daju rješenje u točki 'x' u trenutku 't'.om.
+Zajedno s metodom `f` one daju rješenje u točki 'x' u trenutku 't'.
 ```
 sum(x:number){
     let result = 0;
