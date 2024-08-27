@@ -74,29 +74,92 @@ integrate_n(arr1: Array<string>, l: number, arr2: Array<any>, n: number){
   }
 ```
 
+## Fourierova metoda
+Za rješavanje početno-rubne zadaće za valnu jednadžbu koristimo Fourierovu metodu. Fourierove koeficijente određujemo iz Fourierovi redova 
+za funkcije početnog položaja i početne brzine. Slijedeće funkcije se nalaze u datoteci `app.component.ts` i vraćaju vrijednost Fourierovih koeficijenata
+```
+A_n(n: number){
+    let f = 0;
+    if(this.segments_u.length == 1)
+      f = this.integralService.integrate(this.pocetniPolozaj, this.duljinaZice, 0, this.duljinaZice, n);
+    else{
+      let arr = this.integralService.separate(this.segment_u);
+      f = this.integralService.integrate_n(this.pocetniPolozaji, this.duljinaZice, arr, n);
+    }
+    return 2/this.duljinaZice*f;
+  }
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.1.0.
+  B_n(n: number){
+    let f = 0;
+    if(this.segments_v.length == 1)
+      f = this.integralService.integrate(this.pocetnaBrzina, this.duljinaZice, 0, this.duljinaZice, n);
+    else {
+      let arr = this.integralService.separate(this.segment_v);
+        f = this.integralService.integrate_n(this.pocetneBrzine, this.duljinaZice, arr, n);
+    }
+    return 2/n/Math.PI/this.brzinaVala*f;
+  }
+```
 
-## Development server
+U sijedećim metodama, `sum` računa ukupno titranje žice u točki 'x', dok metoda `f` računa trenutnu vrijednost uzimajući u obzir promjene s vremenom.
+```
+sum(x:number){
+    let result = 0;
+    for(let n = 1; n < 10; n++){
+      result += this.f(n)*Math.sin(n*Math.PI*x/this.duljinaZice)
+    }
+    return result;
+  }
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+  f(n: number){
+    return this.A_n(n)*Math.cos(n*Math.PI*this.brzinaVala*this.chartService.t/this.duljinaZice)
+    + this.B_n(n)*Math.sin(n*Math.PI*this.brzinaVala*this.chartService.t/this.duljinaZice);
+  } 
+```
 
-## Code scaffolding
+## Prikaz grafa
+U datoteci `chart.service.ts` nalazi se metoda `setupChart` koja prikazuje graf, a u datoteci `app.component.ts` imamo metodu `azuriraj`
+u kojoj ovi redovi koda definiraju skaliranje 'x' i 'y' osi:
+```
+this.chartService.myChart.options.scales!['x']!.max = this.duljinaZice;
+this.chartService.myChart.options.scales!['y']!.min = -this.amplitude();
+this.chartService.myChart.options.scales!['y']!.max = this.amplitude();
+```
+Pomoću metode `s` računamo amplitudu, a s metodom `amplitude` računamo maksimalnu amplitudu. 
+```
+amplitude(){
+    let data = []
+    let labels = Array.from({ length: this.duljinaZice*10+1 }, (_, i) => i * 0.1);
+    for(let i = 0; i < labels.length; i++){
+      data[i] = this.s(labels[i]);
+    }
+    const max = Math.max(...data);
+    return max + 0.3 * max;
+  }
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+  s(x:number){
+    let sum = 0;
+    for(let n = 1; n < 10; n++){
+      sum += Math.sqrt(this.A_n(n)**2 + this.B_n(n)**2)*Math.sin(n*Math.PI*x/this.duljinaZice);
+    }
+    return sum;
+  }
+```
+Za ažuriranje grafa imamo metodu `updateChart`:
+```
+updateChart() {
+    let labels = Array.from({ length: this.duljinaZice*10+1 }, (_, i) => i * 0.1);
+    const data = labels.map(x => this.sum(x));
+    this.chartService.myChart.data.labels = labels;
+    this.chartService.myChart.data.datasets[0].data = data;
+    this.chartService.myChart.data.datasets[0].label = `Gibanje žice kroz vrijeme, t = ${this.chartService.t.toFixed(1)}`;
+    this.chartService.myChart.update();
+  }
+```
+U varijablu 'labels' spremljena je subdivizija intervala, te se na taj svaki x mapira metoda `sum` što rezultira prikazom grafa i simulacijom 
+titranja žice.
 
-## Build
+### Mentori i autori
+- Mentori: prof. dr. sc. Krešimir Burazin, doc. dr. sc. Jelena Jankov Pavlović
+- Autori: Matea Čučman, Anja Balentović
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
