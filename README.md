@@ -101,7 +101,8 @@ A_n(n: number){
   }
 ```
 
-U sijedećim metodama, `sum` računa ukupno titranje žice u točki 'x', dok metoda `f` računa trenutnu vrijednost uzimajući u obzir promjene s vremenom.
+U sijedećim metodama, `sum` računa gibanje žice kroz vrijeme, odnosno njezin progib iz ravnotežnog položaja u točki 'x'.
+Zajedno s metodom `f` one daju rješenje u točki 'x' u trenutku 't'.om.
 ```
 sum(x:number){
     let result = 0;
