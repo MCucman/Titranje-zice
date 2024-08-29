@@ -27,6 +27,7 @@
 
 .col-form-label {
   font-size:small;
+  padding: 0;
 }
 
 .form-control {
@@ -37,6 +38,7 @@
 .col-auto {
   margin: 0;
   padding: 0 12px;
+  width: fit-content;
 }
 
 .d-flex {
@@ -69,6 +71,11 @@
 	margin-left: 10px;
   margin-top: 0;
 	padding: 0 6px;
+}
+
+.b {
+  border: 2px inset #5a5959!important;
+  background-color: #828282!important;
 }
 
 .btn2 {

@@ -6,7 +6,6 @@ import { Chart } from 'chart.js/auto';
 })
 export class ChartService {
   myChart!: Chart;
-  t: number = 0;
 
   constructor() { }
 
@@ -31,7 +30,7 @@ export class ChartService {
       data: {
         labels: labels,
         datasets: [{
-          label: `Gibanje žice kroz vrijeme, t = ${this.t.toFixed(1)}`,
+          label: `Gibanje žice kroz vrijeme, t = 0.0`,
           data: data,
           borderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 2,

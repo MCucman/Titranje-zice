@@ -21,6 +21,7 @@ declare global {
 
 export class AppComponent implements OnInit, OnDestroy {
   title = 'Titranje_zice';
+  t: number = 0;
   segments_u: Array<number> = [0];
   segments_v: Array<number> = [0];
   bool: boolean = false;
@@ -28,10 +29,12 @@ export class AppComponent implements OnInit, OnDestroy {
   intervalId: any;
   VJ: string = '$$\\frac{\\partial^2u}{\\partial t^2}(x,t) - c^2 \\frac{\\partial^2u}{\\partial x^2}(x,t) = 0$$';
   RU: string = '$$u(0,t) = 0\\\\ u(l,t) = 0$$';
+  R1: string = '$$x = 0:$$';
+  R2: string = '$$x = l:$$';
   PU: string = '$$u_0(x) =  \\\\ v_0(x) =  $$';
   l: string = '$$Duljina\\\: žice:\\\: l =$$';
   c: string = '$$Brzina\\\: širenja\\\: vala:\\\: c =$$';
-  ru: string = '$$Konstante\\\: rubnih\\\: uvjeta: \\\: $$';
+  ru: string = '$$Rubni\\\: uvjeti: \\\: $$';
   u0: string = '$$Početni\\\: položaj:\\\: u_0(x) =$$';
   v0: string = '$$Početna\\\: brzina:\\\: v_0(x) =$$';
 
@@ -52,8 +55,10 @@ export class AppComponent implements OnInit, OnDestroy {
   pocetneBrzine: Array<string> = [];
   duljinaZice: number = 0;
   brzinaVala: number = 0;
+  r1: boolean = false;
+  r2: boolean = false;
 
-  constructor(private chartService: ChartService, private integralService: IntegralService) {}
+  constructor(private chartService: ChartService, protected integralService: IntegralService) {}
 
   ngOnInit() {
     this.chartService.setupChart();
@@ -68,6 +73,7 @@ export class AppComponent implements OnInit, OnDestroy {
     let pp = '';
     let pb = '';
 
+    this.stopAnimation();
     this.segment_u = [...this.tempsegment_u];
     this.segment_v = [...this.tempsegment_v];
     this.pocetniPolozaj = this.temppocetniPolozaj;
@@ -76,6 +82,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.pocetneBrzine = [...this.temppocetneBrzine];
     this.duljinaZice = this.tempduljinaZice;
     this.brzinaVala = this.tempbrzinaVala;
+    this.integralService.r1 = this.integralService.tempr1;
+    this.integralService.r2 = this.integralService.tempr2;
 
     if(this.segments_u.length == 1) pp = this.pocetniPolozaj;
     else pp = `\\begin{cases}
@@ -92,10 +100,15 @@ export class AppComponent implements OnInit, OnDestroy {
     else
       this.PU = `$$u_0(x) = ${pp} \\\\ v_0(x) = ${pb}$$`;
 
-    this.stopAnimation();
+    if(!this.integralService.r1 && !this.integralService.r2)
+      this.RU = `$$ u(0,t) = 0\\\\ u(${this.duljinaZice},t) = 0 $$`;
+    else if(!this.integralService.r1 && this.integralService.r2)
+      this.RU = `$$ u(0,t) = 0\\\\ \\frac{\\partial u}{\\partial x}(${this.duljinaZice},t) = 0 $$`;
+    else
+      this.RU = `$$ \\frac{\\partial u}{\\partial x}(0,t) = 0\\\\ u(${this.duljinaZice},t) = 0 $$`;
+
     this.VJ = `$$\\frac{\\partial^2u}{\\partial t^2}(x,t) - ${this.brzinaVala}^2 \\frac{\\partial^2u}{\\partial x^2}(x,t) = 0$$`;
-    this.RU = `$$ u(0,t) = 0\\\\ u(${this.duljinaZice},t) = 0 $$`;
-    this.chartService.t = 0;
+    this.t = 0;
     this.chartService.myChart.options.scales!['x']!.max = this.duljinaZice;
     this.chartService.myChart.options.scales!['y']!.min = -this.amplitude();
     this.chartService.myChart.options.scales!['y']!.max = this.amplitude();
@@ -144,14 +157,28 @@ export class AppComponent implements OnInit, OnDestroy {
     this.popup = !this.popup;
   }
 
+  setD(i: number) {
+    if(i == 1)
+      this.integralService.tempr1 = false;
+    else
+      this.integralService.tempr2 = false;
+  }
+
+  setN(i: number) {
+    if(i == 1 && !this.integralService.tempr2)
+      this.integralService.tempr1 = true;
+    else if (i == 2 && !this.integralService.tempr1)
+      this.integralService.tempr2 = true;
+  }
+
   startAnimation() {
     if (!this.bool) {
       this.bool = true;
-      if(this.chartService.t >= 9.9)
-        this.chartService.t = 0;
+      if(this.t >= 9.9)
+        this.t = 0;
       this.intervalId = setInterval(() => {
-        this.chartService.t += 0.1;
-        if(this.chartService.t >= 9.9){
+        this.t += 0.1;
+        if(this.t >= 9.9){
           this.stopAnimation();
         }
         this.updateChart();
@@ -189,24 +216,31 @@ export class AppComponent implements OnInit, OnDestroy {
 
   updateChart() {
     let labels = Array.from({ length: this.duljinaZice*10+1 }, (_, i) => i * 0.1);
-    const data = labels.map(x => this.sum(x));
+    const data = labels.map(x => this.u(x));
     this.chartService.myChart.data.labels = labels;
     this.chartService.myChart.data.datasets[0].data = data;
-    this.chartService.myChart.data.datasets[0].label = `Gibanje žice kroz vrijeme, t = ${this.chartService.t.toFixed(1)}`;
+    this.chartService.myChart.data.datasets[0].label = `Gibanje žice kroz vrijeme, t = ${this.t.toFixed(1)}`;
     this.chartService.myChart.update();
   }
 
-  sum(x:number){
+  u(x:number){
     let result = 0;
     for(let n = 1; n < 10; n++){
-      result += this.f(n)*Math.sin(n*Math.PI*x/this.duljinaZice)
+      result += this.T(n)*this.X(x, n);
     }
     return result;
   }
 
-  f(n: number){
-    return this.A_n(n)*Math.cos(n*Math.PI*this.brzinaVala*this.chartService.t/this.duljinaZice)
-    + this.B_n(n)*Math.sin(n*Math.PI*this.brzinaVala*this.chartService.t/this.duljinaZice);
+  T(n: number){
+    return this.A_n(n)*Math.cos(this.integralService.k(n)*Math.PI*this.brzinaVala*this.t/this.duljinaZice)
+    + this.B_n(n)*Math.sin(this.integralService.k(n)*Math.PI*this.brzinaVala*this.t/this.duljinaZice);
+  }
+
+  X(x: number, n: number){
+    if(this.integralService.r1 && !this.integralService.r2)
+      return Math.cos(this.integralService.k(n)*Math.PI*x/this.duljinaZice);
+    else
+      return Math.sin(this.integralService.k(n)*Math.PI*x/this.duljinaZice);
   }
 
   A_n(n: number){
@@ -217,7 +251,7 @@ export class AppComponent implements OnInit, OnDestroy {
       let arr = this.integralService.separate(this.segment_u);
       f = this.integralService.integrate_n(this.pocetniPolozaji, this.duljinaZice, arr, n);
     }
-    return 2/this.duljinaZice*f;
+    return (2/this.duljinaZice)*f;
   }
 
   B_n(n: number){
@@ -228,7 +262,7 @@ export class AppComponent implements OnInit, OnDestroy {
       let arr = this.integralService.separate(this.segment_v);
         f = this.integralService.integrate_n(this.pocetneBrzine, this.duljinaZice, arr, n);
     }
-    return 2/n/Math.PI/this.brzinaVala*f;
+    return (2/this.integralService.k(n)/Math.PI/this.brzinaVala)*f;
   }
 
   amplitude(){

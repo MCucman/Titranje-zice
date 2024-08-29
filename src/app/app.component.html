@@ -40,10 +40,40 @@
         </div>
       </div>
 
+      <!-- Rubni uvjeti -->
+      <div class="row align-items-center">
+        <div class="about">?
+          <span class="about-text">Klikom na gumb <i>Dirichletov</i> ili <i>Neumannov</i> za svaki kraj žice odabirete između navedene dvije vrste uvjeta.
+            Uvjeti mogu biti u oba kraja Dirichletovi ili kombinacija Dirichletovog i Neumannovog ruvnog uvjeta.</span>
+        </div>
+        <div class="col-auto">
+          <label class="col-form-label">
+            <div id="ru" [innerHtml]="ru"></div>
+          </label>
+        </div>
+        <div class="col-auto">
+          <div class="col-auto">
+            <label class="col-form-label">
+              <div id="R1" [innerHtml]="R1"></div>
+            </label>
+            <button class="btn" [ngClass]="{'b': (integralService.tempr1 == false)}" (click)="setD(1)">Dirichletov</button>
+            <button class="btn" [ngClass]="{'b': (integralService.tempr1 == true)}" (click)="setN(1)">Neumannov</button>
+          </div>
+          <div class="col-auto">
+            <label class="col-form-label">
+              <div id="R2" [innerHtml]="R2"></div>
+            </label>
+            <button class="btn" [ngClass]="{'b': (integralService.tempr2 == false)}" (click)="setD(2)">Dirichletov</button>
+            <button class="btn" [ngClass]="{'b': (integralService.tempr2 == true)}" (click)="setN(2)">Neumannov</button>
+          </div>
+        </div>
+      </div>
+
       <!-- Početni položaj -->
       <div class="row mt-2 align-items-center">
         <div class="about">?
-          <span class="about-text">Opisuje položaj žice u početnom trenutku. Pritiskom na gumb '+' funkcija se može definirati po segmentima.</span>
+          <span class="about-text">Opisuje položaj žice u početnom trenutku. Pritiskom na gumb '+' funkcija se može definirati po segmentima.
+          Za sintaksu unosa pogledati <b>'info'</b>. </span>
         </div>
         <div class="col-auto">
           <label class="col-form-label">
@@ -72,7 +102,8 @@
       <!-- Početna brzina -->
       <div class="row mt-2 align-items-center">
         <div class="about">?
-          <span class="about-text">Opisuje početnu brzinu žice. Pritiskom na gumb '+' funkcija se može definirati po segmentima.</span>
+          <span class="about-text">Opisuje početnu brzinu žice. Pritiskom na gumb '+' funkcija se može definirati po segmentima.
+          Za sintaksu unosa pogledati <b>'info'</b>. </span>
         </div>
         <div class="col-auto">
           <label class="col-form-label">
@@ -125,17 +156,17 @@
     <h2>Tiranje napete žice </h2>
     <p>Titranje napete žice opisuje oscilacije žice koja je napeta silom duž svoje duljine. Te oscilacije su opisane valnom jednadžbom
        koja zajedno sa početnim i rubnim uvjetim čini <i>početno-rubnu zadaću za valnu jednadžbu</i>. Rješava se Fourierovom metodom koja tvrdi
-       da se <i>svaku (periodičnu) funkciju može zapisati kao beskonačnu sumu sinus i kosinus funkcija</i>. Rješenje valne jednadžbe, ako
-       postoji, nije jedinstveno. Za određivanje jedinstvenog rješenja potrebno je specificirati uvjete na rubovima žice i početku 
-       vremenskog intervala. Postoji nekoliko vrsta rubnih uvjeta, među kojima su najvažniji Dirichletovi (korišteni u ovoj aplikaciji), Neumannovi i Robinovi uvjeti.<br>
-       
-       Detaljnije o njima, te samom titranju žice možete pronaći u radu: ...<br>
-       Ako žica ne mijenja stanje, tj. nije u pokretu, ona je u ravnoteži te više o toj temi možete pronaći u radu: ...
-    </p>
-       <h2>O aplikaciji</h2>
-    <p>Omogućava vizualizaciju i simulaciju korisnicima kako različiti parametri, poput duljine žice, brzine širenja vala,
-       početnog položaja i početne brzine, utječu na ponašanje žice. Kroz grafičko sučelje, korisnici mogu mijenjati ove parametre u realnom 
-       vremenu i odmah vidjeti rezultate, što olakšava razumijevanje matematičkog modela koji stoji iza ove pojave.
+       da se <i>svaku (periodičnu) funkciju može zapisati kao beskonačnu sumu sinus i kosinus funkcija</i>. Za određivanje rješenja početno-rubne zadaće
+       potrebno je specificirati uvjete na rubovima žice i početku vremenskog intervala. U aplikaciji je moguće zadati samo Dirichletov i Neumannov
+       rubni uvjet. Nije moguće odabrati Neumannove rubne uvjete u oba kraja žice.<br>
+       <br>
+       Aplikacija omogućava vizualizaciju i simulaciju korisnicima kako različiti parametri, poput duljine žice, brzine širenja vala,
+       početnog položaja i početne brzine, utječu na ponašanje žice. Kroz grafičko sučelje, korisnici mogu mijenjati ove parametre u realnom
+       vremenu i odmah vidjeti rezultate, što olakšava razumijevanje matematičkog modela koji stoji iza ove pojave. <br>
+       <br>
+
+       <b>Unos funkcija</b> za početni položaj i početnu brzinu je intuitivan. To znači da je sintaksa za množenje '*', za dijeljenje '/',
+       potenciranje je '^', broj pi je 'pi', korijen je 'sqrt()', te trigonometrijske funkcije su 'sin()', 'cos()' itd.
     </p>
     <button class="btn" (click)="triggerPopup()">Zatvori</button>
   </div>
