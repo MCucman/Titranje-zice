@@ -63,7 +63,7 @@ Metoda `integrate` izračunava numeričku integraciju funkcije 'f' na intervalu 
 ```
 Funkcija 'f' je definirana kao string pa `mathjs.parse(f).compile();` parsirara matematički izraz iz stringa 'f' u objekt koji se može evaluirati. `compile()` kreira funkciju 'g' (početni položaj, odnosno početna brzina) koja se može koristiti za izračunavanje vrijednosti izraza s različitim vrijednostima varijable 'x'. 
 Zatim u varijablu 'h' je spremljena veličina svakog podintervala. 
-Funkcija `g.evaluate` uvrštava vrijednost u 'x'. Odabir rubnih uvjeta će definirati koji slučaj će se računati ('if\else'), tj.hoće li se u formuli koristiti 'sin' ili 'cos'. Metoda `k(n)` pokriva kako se mijenja 'n'.
+Funkcija `g.evaluate` uvrštava vrijednost u 'x'. Odabir kombinacije rubnih uvjeta će definirati koji slučaj će se računati ('if\else'), tj.hoće li se u formuli koristiti 'sin' ili 'cos'. Metoda `k(n)` pokriva kako se mijenja 'n'.
 
 Metoda `seperate` uzima niz stringova, izvlači brojeve iz svakog stringa koristeći regularni izraz (regex), i vraća novi niz koji sadrži te brojeve.
 ```
