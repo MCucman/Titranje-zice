@@ -40,15 +40,27 @@ import * as mathjs from 'mathjs';
 ```
 Metoda `integrate` izračunava numeričku integraciju funkcije 'f' na intervalu '[a, b]' koristeći trapeznu metodu. 
 ```
-integrate(f:string, l: number, a: number, b: number, n: number): number{
+  integrate(f:string, l: number, a: number, b: number, n: number): number{
     let g = mathjs.parse(f).compile();
     const h = (b - a) / 20;
-    let sum = 0.5 * (g.evaluate({x: a})* Math.sin(n*Math.PI*a/l) + g.evaluate({x: b})* Math.sin(n*Math.PI*b/l));
-    for (let i = 1; i < 20; i++) {
-      sum += g.evaluate({x: a+i*h}) * Math.sin(n*Math.PI*(a+i*h)/l);
+    let sum;
+    if(this.r1 && !this.r2){
+      sum = 0.5 * (g.evaluate({x: a})* Math.cos(this.k(n)*Math.PI*a/l) + g.evaluate({x: b})* Math.cos(this.k(n)*Math.PI*b/l));
+      for (let i = 1; i < 20; i++)
+        sum += g.evaluate({x: a+i*h}) * Math.cos(this.k(n)*Math.PI*(a+i*h)/l);
+    }else{
+      sum = 0.5 * (g.evaluate({x: a})* Math.sin(this.k(n)*Math.PI*a/l) + g.evaluate({x: b})* Math.sin(this.k(n)*Math.PI*b/l));
+      for (let i = 1; i < 20; i++)
+        sum += g.evaluate({x: a+i*h}) * Math.sin(this.k(n)*Math.PI*(a+i*h)/l);
     }
     return sum * h;
   }
+
+  k(n: number){
+    if(this.r1 || this.r2)
+      return (2*n-1)/2;
+    else
+      return n
 ```
 Funkcija 'f' je definirana kao string pa `mathjs.parse(f).compile();` parsirara matematički izraz iz stringa 'f' u objekt koji se može evaluirati. `compile()` kreira funkciju 'g' (početni položaj, odnosno početna brzina) koja se može koristiti za izračunavanje vrijednosti izraza s različitim vrijednostima varijable 'x'. 
 Zatim u varijablu 'h' je spremljena veličina svakog podintervala. 
@@ -101,21 +113,28 @@ A_n(n: number){
   }
 ```
 
-U sijedećim metodama, `sum` računa gibanje žice kroz vrijeme, odnosno njezin progib iz ravnotežnog položaja u točki 'x'.
-Zajedno s metodom `f` one daju rješenje u točki 'x' u trenutku 't'.
+U sijedećim metodama, `u` računa gibanje žice kroz vrijeme, odnosno njezin progib iz ravnotežnog položaja u točki 'x'.
+Zajedno s metodom `T` one daju rješenje u točki 'x' u trenutku 't'.
 ```
-sum(x:number){
+u(x:number){
     let result = 0;
     for(let n = 1; n < 10; n++){
-      result += this.f(n)*Math.sin(n*Math.PI*x/this.duljinaZice)
+      result += this.T(n)*this.X(x, n);
     }
     return result;
   }
 
-  f(n: number){
-    return this.A_n(n)*Math.cos(n*Math.PI*this.brzinaVala*this.chartService.t/this.duljinaZice)
-    + this.B_n(n)*Math.sin(n*Math.PI*this.brzinaVala*this.chartService.t/this.duljinaZice);
-  } 
+  T(n: number){
+    return this.A_n(n)*Math.cos(this.integralService.k(n)*Math.PI*this.brzinaVala*this.t/this.duljinaZice)
+    + this.B_n(n)*Math.sin(this.integralService.k(n)*Math.PI*this.brzinaVala*this.t/this.duljinaZice);
+  }
+
+  X(x: number, n: number){
+    if(this.integralService.r1 && !this.integralService.r2)
+      return Math.cos(this.integralService.k(n)*Math.PI*x/this.duljinaZice);
+    else
+      return Math.sin(this.integralService.k(n)*Math.PI*x/this.duljinaZice);
+  }
 ```
 
 ## Prikaz grafa
