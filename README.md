@@ -39,7 +39,7 @@ Definirana u datoteci `integral.service.ts`. Za parsiranje i evaluaciju matemati
 import * as mathjs from 'mathjs';
 ```
 Metoda `integrate` izračunava numeričku integraciju funkcije 'f' na intervalu '[a, b]' koristeći trapeznu metodu. 
-```
+``` 
   integrate(f:string, l: number, a: number, b: number, n: number): number{
     let g = mathjs.parse(f).compile();
     const h = (b - a) / 20;
@@ -64,7 +64,7 @@ Metoda `integrate` izračunava numeričku integraciju funkcije 'f' na intervalu 
 ```
 Funkcija 'f' je definirana kao string pa `mathjs.parse(f).compile();` parsirara matematički izraz iz stringa 'f' u objekt koji se može evaluirati. `compile()` kreira funkciju 'g' (početni položaj, odnosno početna brzina) koja se može koristiti za izračunavanje vrijednosti izraza s različitim vrijednostima varijable 'x'. 
 Zatim u varijablu 'h' je spremljena veličina svakog podintervala. 
-Funkcija `g.evaluate` uvrštava vrijednost u 'x'. 
+Funkcija `g.evaluate` uvrštava vrijednost u 'x'. Odabir rubnih uvjeta će definirati koji slučaj će se računati ('if\else'). 
 
 Metoda `seperate` uzima niz stringova, izvlači brojeve iz svakog stringa koristeći regularni izraz (regex), i vraća novi niz koji sadrži te brojeve.
 ```
@@ -113,8 +113,8 @@ A_n(n: number){
   }
 ```
 
-U sijedećim metodama, `u` računa gibanje žice kroz vrijeme, odnosno njezin progib iz ravnotežnog položaja u točki 'x'.
-Zajedno s metodom `T` one daju rješenje u točki 'x' u trenutku 't'.
+Slijedeće metode zajedno računaju rješenje 'u(x,t)', gdje `u` računa progib iz ravnotežnog položaja u točki 'x',
+metoda `T` opisuje vremensku komponentu, tj. kako se žica mijenja s vremenom, a metoda `X` je prostorna komponenta koja određuje oblik vala u svakom trenutku, ovisno o poziciji na žici.
 ```
 u(x:number){
     let result = 0;
