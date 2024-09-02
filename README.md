@@ -3,8 +3,7 @@
 ## Uvod
 Ovaj projekt predstavlja razvoj web aplikacije koja simulira i vizualizira dinamičko ponašanje žice podložne oscilacijama. Oscilacije žica su fundamentalna pojava u mnogim disciplinama, od fizike i inženjeringa do glazbe i umjetnosti. Razumijevanje ove pojave zahtijeva kombinaciju teorijskog znanja i praktičnih simulacija, što ovaj projekt čini izuzetno korisnim i značajnim.
 Cilj ovog projekta je omogućiti korisnicima da intuitivno istražuju kako različiti parametri, poput duljine žice, brzine širenja vala, početnog položaja i početne brzine, utječu na ponašanje žice. Kroz grafičko sučelje, korisnici mogu mijenjati ove parametre u realnom vremenu i odmah vidjeti rezultate, što olakšava razumijevanje matematičkog modela koji stoje iza ove pojave.
-Ova dokumentacija će pružiti detaljniji uvid u tehničke aspekte implementacije, uključujući korištene matematičke modele, numeričke metode za njihovo rješavanje, te tehničke izazove pri razvoju grafičkog sučelja. 
-
+Ova dokumentacija će pružiti detaljniji uvid u tehničke aspekte implementacije, uključujući korištene matematičke modele, te numeričke metode za njihovo rješavanje.
 ## LaTeX sintaksa
 Za korištenje standardne LaTeX sintakse koristili smo MathJax, JavaScript biblioteku koja omogućava prikaz lijepo formatiranih matematičkih izraza na web stranici. 
 Uključivanje MathJax bibliotoke: 
