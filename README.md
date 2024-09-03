@@ -10,7 +10,7 @@ Uključivanje MathJax bibliotoke:
 ```
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 ```
-Slijedeći dio koda definira kako se prepoznaju matematički izrazi.
+Sljedeći dio koda definira kako se prepoznaju matematički izrazi.
 
 ```
   <script type="text/x-mathjax-config">
@@ -87,7 +87,7 @@ integrate_n(arr1: Array<string>, l: number, arr2: Array<any>, n: number){
 
 ## Fourierova metoda
 Za rješavanje početno-rubne zadaće za valnu jednadžbu koristimo Fourierovu metodu. Fourierove koeficijente određujemo iz Fourierovi redova 
-za funkcije početnog položaja i početne brzine. Slijedeće funkcije se nalaze u datoteci `app.component.ts` i vraćaju vrijednost Fourierovih koeficijenata
+za funkcije početnog položaja i početne brzine. Sljedeće funkcije se nalaze u datoteci `app.component.ts` i vraćaju vrijednost Fourierovih koeficijenata
 ```
 A_n(n: number){
     let f = 0;
@@ -112,7 +112,7 @@ A_n(n: number){
   }
 ```
 
-Slijedeće metode zajedno računaju rješenje 'u(x,t)', gdje `u` računa progib iz ravnotežnog položaja u točki 'x',
+Sljedeće metode zajedno računaju rješenje 'u(x,t)', gdje `u` računa progib iz ravnotežnog položaja u točki 'x',
 metoda `T` opisuje vremensku komponentu, tj. kako se žica mijenja s vremenom, a metoda `X` je prostorna komponenta koja određuje oblik vala u svakom trenutku, ovisno o poziciji na žici.
 ```
 u(x:number){
