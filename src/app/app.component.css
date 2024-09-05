@@ -131,6 +131,7 @@
   z-index: 1;
   padding-left: 150px;
   padding-right: 150px;
+  overflow-y: auto;
 }
 
 .popup-content {
@@ -138,6 +139,9 @@
   padding: 20px;
   border-radius: 10px;
   text-align: center;
+  max-height: 95%;
+  max-width: 95%;
+  overflow-y: auto;
 }
 
 @media (min-width: 800) or (max-width: 1200px){
@@ -206,5 +210,9 @@
 
   .btn2 {
     top: -4px;
+  }
+
+  .info-popup {
+    padding: 0;
   }
 }
